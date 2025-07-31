@@ -1,0 +1,8 @@
+prefix=/home/yuyu/桌面/gazebo_mapping/Gazebo_Homework/install
+
+Name: homework
+Description: Description of homework
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: roscpp std_msgs geometry_msgs visualization_msgs tf2 tf2_ros fsd_common_msgsnav_msgs
