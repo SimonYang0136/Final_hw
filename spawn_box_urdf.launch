@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+    <!--指定初始位置-->
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0"/>
+    <arg name="roll" default="0"/>
+    <arg name="pitch" default="0"/>
+    <arg name="yaw" default="0"/>
+
+    <!--指定模型文件路径和名称-->
+    <arg name="urdf_robot_file" value="$(find gazebo_sim)/urdf/box.urdf"/>
+    <arg name="robot_name" value="box_robot"/>
+  
+    <!-- 启动Gazebo-->
+    <!-- gazebo_ros是一个ROS包，用于与Gazebo进行接口 -->
+    <!--spawn_model是一个用于在Gazebo中生成模型的节点-->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    </include>
+
+    <!--设置robot_description参数-->
+    <!--ROS参数服务器内重要参数，用于指定Robot参数对应的是什么文件-->
+    <param name="robot_description" textfile="$(arg urdf_robot_file)"/>
+
+    <!--放置模型-->
+    <!--节点：spawn_model,放置模型-->
+    <!--参数：模型所需参数，包括模型所用文件、初始位置、姿态等-->
+    <node pkg="gazebo_ros" type="spawn_model" name="spawn_box" args="-param robot_description -urdf -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -model $(arg robot_name)"/>
+</launch>
