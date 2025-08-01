@@ -1,27 +1,28 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_50d88/fast && /usr/bin/make -f CMakeFiles/cmTC_50d88.dir/build.make CMakeFiles/cmTC_50d88.dir/build
-make[1]: 进入目录“/home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
-Building C object CMakeFiles/cmTC_50d88.dir/src.c.o
-/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_50d88.dir/src.c.o   -c /home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_50d88
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_50d88.dir/link.txt --verbose=1
-/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    -rdynamic CMakeFiles/cmTC_50d88.dir/src.c.o  -o cmTC_50d88 
-/usr/bin/ld: CMakeFiles/cmTC_50d88.dir/src.c.o: in function `main':
+Run Build Command(s):/usr/bin/make cmTC_6d068/fast && /usr/bin/make  -f CMakeFiles/cmTC_6d068.dir/build.make CMakeFiles/cmTC_6d068.dir/build
+make[1]: 进入目录“/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
+Building C object CMakeFiles/cmTC_6d068.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_6d068.dir/src.c.o -c /home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_6d068
+/opt/CMake/CMake-3.19.8/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6d068.dir/link.txt --verbose=1
+/usr/bin/cc -rdynamic CMakeFiles/cmTC_6d068.dir/src.c.o -o cmTC_6d068 
+/usr/bin/ld: CMakeFiles/cmTC_6d068.dir/src.c.o: in function `main':
 src.c:(.text+0x46): undefined reference to `pthread_create'
 /usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
-/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
+/usr/bin/ld: src.c:(.text+0x5e): undefined reference to `pthread_cancel'
+/usr/bin/ld: src.c:(.text+0x6f): undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_50d88.dir/build.make:87：cmTC_50d88] 错误 1
-make[1]: 离开目录“/home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
-make: *** [Makefile:121：cmTC_50d88/fast] 错误 2
+make[1]: *** [CMakeFiles/cmTC_6d068.dir/build.make:106：cmTC_6d068] 错误 1
+make[1]: 离开目录“/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
+make: *** [Makefile:140：cmTC_6d068/fast] 错误 2
 
 
 Source file was:
 #include <pthread.h>
 
-void* test_func(void* data)
+static void* test_func(void* data)
 {
   return data;
 }
@@ -31,6 +32,7 @@ int main(void)
   pthread_t thread;
   pthread_create(&thread, NULL, test_func, NULL);
   pthread_detach(thread);
+  pthread_cancel(thread);
   pthread_join(thread, NULL);
   pthread_atfork(NULL, NULL, NULL);
   pthread_exit(NULL);
@@ -39,20 +41,20 @@ int main(void)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp
+Change Dir: /home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_f518f/fast && /usr/bin/make -f CMakeFiles/cmTC_f518f.dir/build.make CMakeFiles/cmTC_f518f.dir/build
-make[1]: 进入目录“/home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
-Building C object CMakeFiles/cmTC_f518f.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_f518f.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
-Linking C executable cmTC_f518f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f518f.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_f518f.dir/CheckFunctionExists.c.o  -o cmTC_f518f  -lpthreads 
+Run Build Command(s):/usr/bin/make cmTC_f986c/fast && /usr/bin/make  -f CMakeFiles/cmTC_f986c.dir/build.make CMakeFiles/cmTC_f986c.dir/build
+make[1]: 进入目录“/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
+Building C object CMakeFiles/cmTC_f986c.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_f986c.dir/CheckFunctionExists.c.o -c /opt/CMake/CMake-3.19.8/share/cmake-3.19/Modules/CheckFunctionExists.c
+Linking C executable cmTC_f986c
+/opt/CMake/CMake-3.19.8/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f986c.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create -rdynamic CMakeFiles/cmTC_f986c.dir/CheckFunctionExists.c.o -o cmTC_f986c  -lpthreads 
 /usr/bin/ld: 找不到 -lpthreads
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_f518f.dir/build.make:87：cmTC_f518f] 错误 1
-make[1]: 离开目录“/home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
-make: *** [Makefile:121：cmTC_f518f/fast] 错误 2
+make[1]: *** [CMakeFiles/cmTC_f986c.dir/build.make:106：cmTC_f986c] 错误 1
+make[1]: 离开目录“/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/CMakeFiles/CMakeTmp”
+make: *** [Makefile:140：cmTC_f986c/fast] 错误 2
 
 
 

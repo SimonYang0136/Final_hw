@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/yuyu/桌面/Final_hw/Gazebo_ws/devel/lib/homework_planning/planning"
-  "/home/yuyu/桌面/Final_hw/Gazebo_ws/devel/lib/homework_planning/planning.pdb"
+  "/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel/lib/homework_planning/planning"
+  "/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel/lib/homework_planning/planning.pdb"
   "CMakeFiles/planning.dir/src/planning.cpp.o"
 )
 
