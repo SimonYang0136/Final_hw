@@ -1,2 +1,0 @@
-fsd_common_msgs:homework:homework_planning
--DCATKIN_DEVEL_PREFIX=/home/yuyu/桌面/gazebo_mapping/Gazebo_Homework/devel -DCMAKE_INSTALL_PREFIX=/home/yuyu/桌面/gazebo_mapping/Gazebo_Homework/install -G Unix Makefiles
