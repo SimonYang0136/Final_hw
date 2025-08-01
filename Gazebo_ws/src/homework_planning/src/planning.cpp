@@ -40,9 +40,12 @@ std::vector<double> plan_speed(const std::vector<geometry_msgs::Point>& mid_poin
         double norm2 = sqrt(dx2*dx2 + dy2*dy2);
         double angle = acos(std::max(-1.0, std::min(1.0, dot/(norm1*norm2+1e-6))));
         // 根据弯道角度调整速度，弯道越急速度越低
-        if(angle > 0.5) speeds[i] = 1.0; // 急弯
-        else if(angle > 0.2) speeds[i] = 1.5; // 普通弯
-        else speeds[i] = 2.5; // 直线
+        if(angle > 0.5) 
+            speeds[i] = 1.0; // 急弯
+        else if(angle > 0.2) 
+            speeds[i] = 1.5; // 普通弯
+        else 
+            speeds[i] = 2.5; // 直线
     }
     return speeds;
 }
@@ -95,12 +98,10 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
     // 速度规划
     std::vector<double> speeds = plan_speed(mid_points);
     //输出在终端查看速度信息
-    for(size_t i=0; i<mid_points.size(); ++i) {
+    for(size_t i=0; i<mid_points.size(); ++i) 
         ROS_INFO("mid_point[%lu]: (%.2f, %.2f), speed: %.2f", i, mid_points[i].x, mid_points[i].y, speeds[i]);
-    }
     line.points = mid_points;
     return line;
-
 }
 
 void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::Publisher& pub)
