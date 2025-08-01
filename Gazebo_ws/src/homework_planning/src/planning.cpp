@@ -95,6 +95,7 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
         mid2.z = 0;
         mid_points.push_back(mid2);
     }
+    //发布中点信息
     for (size_t i=0; i<mid_points.size(); ++i)
         pub.publish(mid_points[i]);
     // 速度规划
@@ -129,8 +130,8 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "planning");
     ros::NodeHandle nh;
-    ros::Publisher pub = nh.advertise<visualization_msgs::Marker>("/planning", 10);
-    ros::Publisher pub2 = nh.advertise<geometry_msgs::Point>("/line_points",10);
+    ros::Publisher pub = nh.advertise<visualization_msgs::Marker>("/planning", 10);//发布可视化规划线在rviz中
+    ros::Publisher pub2 = nh.advertise<geometry_msgs::Point>("/line_points",10);//用于发布中点信息给控制
     //用lambda表达式获取发布方，这样就不用定义为全局变量
     auto callback = [&pub,&pub2](const visualization_msgs::MarkerArray::ConstPtr& cones) 
     {
