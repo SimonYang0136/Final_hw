@@ -524,6 +524,12 @@ message_runtime_DIR:PATH=/opt/ros/noetic/share/message_runtime/cmake
 //The directory containing a CMake configuration file for nav_msgs.
 nav_msgs_DIR:PATH=/opt/ros/noetic/share/nav_msgs/cmake
 
+//Value Computed by CMake
+racecar_description_BINARY_DIR:STATIC=/home/yuyu/桌面/Final_hw/Gazebo_ws/build/racecar_description
+
+//Value Computed by CMake
+racecar_description_SOURCE_DIR:STATIC=/home/yuyu/桌面/Final_hw/Gazebo_ws/src/racecar_description
+
 //The directory containing a CMake configuration file for rosconsole.
 rosconsole_DIR:PATH=/opt/ros/noetic/share/rosconsole/cmake
 

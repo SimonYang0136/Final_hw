@@ -15,10 +15,6 @@ visualization_msgs/Marker.h
 -
 visualization_msgs/MarkerArray.h
 -
-vector
--
-algorithm
--
 geometry_msgs/Point.h
 -
 

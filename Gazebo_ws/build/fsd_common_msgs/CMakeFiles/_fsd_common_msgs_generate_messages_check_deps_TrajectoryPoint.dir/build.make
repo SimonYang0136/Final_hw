@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/yuyu/桌面/Final_hw/Gazebo_ws/build
 include fsd_common_msgs/CMakeFiles/_fsd_common_msgs_generate_messages_check_deps_TrajectoryPoint.dir/progress.make
 
 fsd_common_msgs/CMakeFiles/_fsd_common_msgs_generate_messages_check_deps_TrajectoryPoint:
-	cd /home/yuyu/桌面/Final_hw/Gazebo_ws/build/fsd_common_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py fsd_common_msgs /home/yuyu/桌面/Final_hw/Gazebo_ws/src/fsd_common_msgs/msg/TrajectoryPoint.msg fsd_common_msgs/CarState:geometry_msgs/Pose2D:std_msgs/Header:fsd_common_msgs/CarStateDt
+	cd /home/yuyu/桌面/Final_hw/Gazebo_ws/build/fsd_common_msgs && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genmsg/cmake/../../../lib/genmsg/genmsg_check_deps.py fsd_common_msgs /home/yuyu/桌面/Final_hw/Gazebo_ws/src/fsd_common_msgs/msg/TrajectoryPoint.msg geometry_msgs/Pose2D:fsd_common_msgs/CarState:std_msgs/Header:fsd_common_msgs/CarStateDt
 
 _fsd_common_msgs_generate_messages_check_deps_TrajectoryPoint: fsd_common_msgs/CMakeFiles/_fsd_common_msgs_generate_messages_check_deps_TrajectoryPoint
 _fsd_common_msgs_generate_messages_check_deps_TrajectoryPoint: fsd_common_msgs/CMakeFiles/_fsd_common_msgs_generate_messages_check_deps_TrajectoryPoint.dir/build.make
