@@ -24,7 +24,7 @@ private:
     
     // 发布器
     ros::Publisher cmd_vel_pub_;         // 发布控制命令
-    ros::Publisher control_line_pub_;    // 发布可视化路径
+    ros::Publisher control_viz_pub_;     // 发布控制状态可视化
     
     // 控制参数
     double constant_linear_vel_;         // 恒定线速度
@@ -86,7 +86,7 @@ public:
         
         // 初始化发布器
         cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
-        control_line_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("/control_line", 10);
+        control_viz_pub_ = nh_.advertise<visualization_msgs::MarkerArray>("/control_viz", 10);
         
         last_time_ = ros::Time::now();
         
@@ -248,7 +248,7 @@ public:
     }
     
     /**
-     * @brief 发布控制路径可视化
+     * @brief 发布控制状态可视化（前视点和机器人位置）
      */
     void publishControlLine()
     {
@@ -256,81 +256,56 @@ public:
         
         visualization_msgs::MarkerArray marker_array;
         
-        // 创建规划路径线条标记
-        visualization_msgs::Marker line_marker;
-        line_marker.header.frame_id = "odom";
-        line_marker.header.stamp = ros::Time::now();
-        line_marker.ns = "planning_path";
-        line_marker.id = 0;
-        line_marker.type = visualization_msgs::Marker::LINE_STRIP;
-        line_marker.action = visualization_msgs::Marker::ADD;
-        
-        // 设置线条属性
-        line_marker.scale.x = 0.05;  // 线宽
-        line_marker.color.r = 0.0;   // 蓝色
-        line_marker.color.g = 0.0;
-        line_marker.color.b = 1.0;
-        line_marker.color.a = 1.0;   // 不透明
-        
-        // 添加规划路径点
-        for (const auto& point : planning_points_) {
-            line_marker.points.push_back(point);
-        }
-        
-        marker_array.markers.push_back(line_marker);
-        
         // 创建前视点标记
-        if (!planning_points_.empty()) {
-            // 计算前视点
-            geometry_msgs::Point lookahead_point;
-            bool found_lookahead = false;
+        geometry_msgs::Point lookahead_point;
+        bool found_lookahead = false;
+        
+        // 计算前视点
+        for (const auto& point : planning_points_) {
+            double distance = sqrt(
+                pow(point.x - current_position_.x, 2) +
+                pow(point.y - current_position_.y, 2)
+            );
             
-            for (const auto& point : planning_points_) {
-                double distance = sqrt(
-                    pow(point.x - current_position_.x, 2) +
-                    pow(point.y - current_position_.y, 2)
-                );
-                
-                if (distance >= lookahead_distance_) {
-                    lookahead_point = point;
-                    found_lookahead = true;
-                    break;
-                }
+            if (distance >= lookahead_distance_) {
+                lookahead_point = point;
+                found_lookahead = true;
+                break;
             }
-            
-            if (!found_lookahead) {
-                lookahead_point = planning_points_.back();
-            }
-            
-            // 前视点标记
-            visualization_msgs::Marker lookahead_marker;
-            lookahead_marker.header.frame_id = "odom";
-            lookahead_marker.header.stamp = ros::Time::now();
-            lookahead_marker.ns = "lookahead_point";
-            lookahead_marker.id = 1;
-            lookahead_marker.type = visualization_msgs::Marker::SPHERE;
-            lookahead_marker.action = visualization_msgs::Marker::ADD;
-            
-            lookahead_marker.pose.position = lookahead_point;
-            lookahead_marker.pose.orientation.w = 1.0;
-            
-            lookahead_marker.scale.x = 0.2;
-            lookahead_marker.scale.y = 0.2;
-            lookahead_marker.scale.z = 0.2;
-            lookahead_marker.color.r = 1.0;  // 红色
-            lookahead_marker.color.g = 0.0;
-            lookahead_marker.color.b = 0.0;
-            lookahead_marker.color.a = 1.0;
-            
-            marker_array.markers.push_back(lookahead_marker);
         }
+        
+        if (!found_lookahead) {
+            lookahead_point = planning_points_.back();
+        }
+        
+        // 前视点标记
+        visualization_msgs::Marker lookahead_marker;
+        lookahead_marker.header.frame_id = "odom";
+        lookahead_marker.header.stamp = ros::Time::now();
+        lookahead_marker.ns = "lookahead_point";
+        lookahead_marker.id = 0;
+        lookahead_marker.type = visualization_msgs::Marker::SPHERE;
+        lookahead_marker.action = visualization_msgs::Marker::ADD;
+        
+        lookahead_marker.pose.position = lookahead_point;
+        lookahead_marker.pose.orientation.w = 1.0;
+        
+        lookahead_marker.scale.x = 0.2;
+        lookahead_marker.scale.y = 0.2;
+        lookahead_marker.scale.z = 0.2;
+        lookahead_marker.color.r = 1.0;  // 红色
+        lookahead_marker.color.g = 0.0;
+        lookahead_marker.color.b = 0.0;
+        lookahead_marker.color.a = 1.0;
+        
+        marker_array.markers.push_back(lookahead_marker);
         
         // 创建当前位置标记
         visualization_msgs::Marker robot_marker;
         robot_marker.header.frame_id = "odom";
         robot_marker.header.stamp = ros::Time::now();
         robot_marker.ns = "robot_position";
-        robot_marker.id = 2;
+        robot_marker.id = 1;
         robot_marker.type = visualization_msgs::Marker::ARROW;
         robot_marker.action = visualization_msgs::Marker::ADD;
         
@@ -352,7 +327,7 @@ public:
         marker_array.markers.push_back(robot_marker);
         
         // 发布可视化消息
-        control_line_pub_.publish(marker_array);
+        control_viz_pub_.publish(marker_array);
     }
     
     /**
@@ -362,7 +337,7 @@ public:
     {
         ROS_INFO("Box Lateral Controller running...");
         ROS_INFO("Waiting for planning and odom messages...");
-        ROS_INFO("Publishing cmd_vel and control_line topics...");
+        ROS_INFO("Publishing cmd_vel and control_viz topics...");
         
         ros::spin();  // 事件驱动
     }
