@@ -63,15 +63,6 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
             mid_points.push_back(mid);
         }
     } 
-    // 对mid_points向量进行排序，后续依次连成线
-    std::sort(mid_points.begin(), mid_points.end(), [](const geometry_msgs::Point& a, const geometry_msgs::Point& b){ return a.x < b.x; });
-    // 以车辆坐标为起点
-    if (n<50)
-    {
-        line.points.push_back(g_vehicle_pose);
-        n++;
-    }
-    for(const auto& pt : mid_points) line.points.push_back(pt);
     // 返回Marker对象
     return line;
 }
