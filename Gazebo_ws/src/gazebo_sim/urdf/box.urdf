@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+
 <!-- filepath: urdf/box_robot.urdf -->
 <robot name="box_robot">
 
@@ -6,18 +7,25 @@
   <link name="base_link">
     <!-- 惯性属性 -->
     <inertial>
-      <mass value="1.0"/>
+      <mass value="1000"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="0.083" ixy="0.0" ixz="0.0"
-               iyy="0.083" iyz="0.0"
-               izz="0.083"/>
+      <inertia ixx="166.6666" ixy="0.0" ixz="0.0"
+               iyy="166.6666" iyz="0.0"
+               izz="166.6666"/>
     </inertial>
-    
+
+    <!-- 固定关节 -->
+    <joint name="inertial_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="main_mass"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
     <!-- 视觉外观 -->
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.3 0.2 0.1"/>
+        <box size="1 1 1"/>
       </geometry>
       <material name="blue">
         <color rgba="0 0 1 1"/>
@@ -28,7 +36,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <box size="0.3 0.2 0.1"/>
+        <box size="1 1 1"/>
       </geometry>
     </collision>
   </link>
