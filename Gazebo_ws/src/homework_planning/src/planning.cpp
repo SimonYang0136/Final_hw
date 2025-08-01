@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <geometry_msgs/Point.h>
 
-
+const double cos_theta = (3.04)/(sqrt(pow(3.04,2)+pow(-3.705,2)));
+const double sin_theta = (-3.705)/(sqrt(pow(3.04,2)+pow(-3.705,2)));
 // 默认车辆坐标（可用于后续起点修正等）
 geometry_msgs::Point g_vehicle_pose = [](){
     geometry_msgs::Point p;
@@ -18,7 +19,7 @@ geometry_msgs::Point g_vehicle_pose = [](){
 
 // 创建中心线
 int n=0;
-visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::Point>& cone) 
+visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::Point>& cone_left, const std::vector<geometry_msgs::Point>& cone_right) 
 {
     visualization_msgs::Marker line;
     line.header.frame_id = "map";
@@ -32,15 +33,27 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
     line.color.a = 1.0f;
     // 创建一个空的mid_points向量用于存储中点坐标
     std::vector<geometry_msgs::Point> mid_points;
+    // 逆旋转参数（与cones_address一致）
+    // 车辆起点直接用原始坐标
     mid_points.push_back(g_vehicle_pose);
-    for(size_t i=0; i<cone.size()-1; i++)
+    // 按x坐标排序，确保配对顺序一致
+    std::vector<geometry_msgs::Point> left_sorted = cone_left;
+    std::vector<geometry_msgs::Point> right_sorted = cone_right;
+    std::sort(left_sorted.begin(), left_sorted.end(), [](const geometry_msgs::Point& a, const geometry_msgs::Point& b){ return a.x < b.x; });
+    std::sort(right_sorted.begin(), right_sorted.end(), [](const geometry_msgs::Point& a, const geometry_msgs::Point& b){ return a.x < b.x; });
+    size_t n = std::min(left_sorted.size(), right_sorted.size());
+    for(size_t i=0; i<n; i++)
     {
-        // 计算左右锥桶的中点
         geometry_msgs::Point mid;
-        mid.x = (cone[i].x + cone[i+1].x) / 2.0;
-        mid.y = (cone[i].y + cone[i+1].y) / 2.0;
-        mid.z=0;
-        mid_points.push_back(mid);
+        mid.x = (left_sorted[i].x + right_sorted[i].x) / 2.0;
+        mid.y = (left_sorted[i].y + right_sorted[i].y) / 2.0;
+        mid.z = 0;
+        // 逆旋转回原始坐标系（注意公式）
+        geometry_msgs::Point mid_rot;
+        mid_rot.x = (mid.x*cos_theta - mid.y*sin_theta)/(pow(cos_theta,2)-pow(sin_theta,2));
+        mid_rot.y = (mid.x*sin_theta - mid.y*cos_theta)/(pow(sin_theta,2)-pow(cos_theta,2));
+        mid_rot.z = 0;
+        mid_points.push_back(mid_rot);
     }
     // 至少需要两个点，否则不返回有效Marker
     if(mid_points.size() < 2) {
@@ -53,23 +66,26 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
 
 void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::Publisher& pub)
 {
-    //定义一个横向的最大范围用于排除跑道外的误检点
-    constexpr double max = 3.0; 
-    //定义一个空的left_cones和right_cones向量用于存储左右锥桶的坐标
-    std::vector<geometry_msgs::Point> cone;
-    //遍历所有锥桶，将左右锥桶分别存储到left_cones和right_cones向量中
+    std::vector<geometry_msgs::Point> cone_left,cone_right;
+    
     for(const auto& marker : cones->markers) 
     {
+        geometry_msgs::Point p;
         //获取锥桶坐标信息
-        const auto& p = marker.pose.position;
-        cone.push_back(p);
+        p.x=marker.pose.position.x*cos_theta-marker.pose.position.y*sin_theta;
+        p.y=marker.pose.position.x*sin_theta+marker.pose.position.y*cos_theta;
+        p.z=0;
+        if (p.y<0)
+            cone_left.push_back(p);
+        else
+            cone_right.push_back(p);
     }
+    // 调试输出分组后锥桶数量
+    ROS_INFO("Left cones: %lu, Right cones: %lu", cone_left.size(), cone_right.size());
     //将中点连线
-    auto line = create_center_line(cone);
+    auto line = create_center_line(cone_left,cone_right);
     pub.publish(line);
 }
-
-
 
 int main(int argc, char **argv)
 {
