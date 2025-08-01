@@ -3,6 +3,7 @@
     <!-- 使用相对路径指定世界文件 -->
     <arg name="world_file" default="$(find gazebo_sim)/world/map.world"/>
 
+
     <!--指定初始位置-->
     <arg name="x" default="0"/>
     <arg name="y" default="0"/>
