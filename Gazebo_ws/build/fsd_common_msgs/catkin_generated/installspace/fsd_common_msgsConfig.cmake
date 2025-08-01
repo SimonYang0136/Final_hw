@@ -67,14 +67,14 @@ set(fsd_common_msgs_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(fsd_common_msgs_SOURCE_PREFIX /home/simon/Desktop/Final/Final_hw/Gazebo_ws/src/fsd_common_msgs)
-  set(fsd_common_msgs_DEVEL_PREFIX /home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel)
+  set(fsd_common_msgs_SOURCE_PREFIX /home/yuyu/桌面/Final_hw/Gazebo_ws/src/fsd_common_msgs)
+  set(fsd_common_msgs_DEVEL_PREFIX /home/yuyu/桌面/Final_hw/Gazebo_ws/devel)
   set(fsd_common_msgs_INSTALL_PREFIX "")
   set(fsd_common_msgs_PREFIX ${fsd_common_msgs_DEVEL_PREFIX})
 else()
   set(fsd_common_msgs_SOURCE_PREFIX "")
   set(fsd_common_msgs_DEVEL_PREFIX "")
-  set(fsd_common_msgs_INSTALL_PREFIX /home/simon/Desktop/Final/Final_hw/Gazebo_ws/install)
+  set(fsd_common_msgs_INSTALL_PREFIX /home/yuyu/桌面/Final_hw/Gazebo_ws/install)
   set(fsd_common_msgs_PREFIX ${fsd_common_msgs_INSTALL_PREFIX})
 endif()
 
@@ -156,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/simon/Desktop/Final/Final_hw/Gazebo_ws/install/lib;/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/yuyu/桌面/Final_hw/Gazebo_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

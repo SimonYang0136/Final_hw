@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   visualization_msgs
+  geometry_msgs
+  tf2_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -106,7 +108,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES homework_planning
- CATKIN_DEPENDS roscpp rospy std_msgs visualization_msgs
+ CATKIN_DEPENDS roscpp rospy std_msgs visualization_msgs geometry_msgs tf2_ros
 #  DEPENDS system_lib
 )
 

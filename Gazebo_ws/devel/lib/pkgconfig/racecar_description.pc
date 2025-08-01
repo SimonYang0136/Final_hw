@@ -1,8 +1,0 @@
-prefix=/home/yuyu/桌面/Final_hw/Gazebo_ws/devel
-
-Name: racecar_description
-Description: Description of racecar_description
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

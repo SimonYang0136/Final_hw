@@ -5,7 +5,7 @@
 # or fall back to the destination set at configure time
 
 if test -z $_CATKIN_SETUP_DIR
-    set _CATKIN_SETUP_DIR /home/simon/Desktop/Final/Final_hw/Gazebo_ws/install
+    set _CATKIN_SETUP_DIR /home/yuyu/桌面/Final_hw/Gazebo_ws/install
 end
 
 set CATKIN_SETUP_UTIL_ARGS "--extend --local"

@@ -3,6 +3,9 @@
 #include<visualization_msgs/Marker.h>
 #include<visualization_msgs/MarkerArray.h>
 #include<geometry_msgs/Point.h>
+#include<tf2_ros/static_transform_broadcaster.h>
+#include<geometry_msgs/TransformStamped.h>
+#include <tf2/LinearMath/Quaternion.h>
 // 根据前几个锥桶计算得到的中线的参数，用于后续判断左右锥桶
 #define K -1.333
 #define B -12.65
@@ -97,6 +100,33 @@ int main(int argc, char **argv)
         cones_address(cones, pub);
     };
     ros::Subscriber sub = nh.subscribe<visualization_msgs::MarkerArray>("/mapping/cones", 10, callback);
+    //广播静态变换，将map中的起点线处的两个锥桶的中点变换为world中的原点，跑道方向为world的x轴
+    static tf2_ros::StaticTransformBroadcaster static_broadcaster;
+    geometry_msgs::TransformStamped transform;
+    transform.header.stamp = ros::Time::now();
+    transform.header.frame_id = "world";   // 父坐标系
+    transform.child_frame_id = "map";      // 子坐标系
+    // map 的原点在 world 中的位置
+    transform.transform.translation.x = 7.135;
+    transform.transform.translation.y = 3.405;
+    transform.transform.translation.z = 0.0;
+    tf2::Quaternion quat;
+    quat.setRPY(0.0, 0.0, 0.9078);  // roll, pitch, yaw（单位：弧度）
+    quat.normalize(); 
+    double yaw = 0.9078;
+    double cos_yaw = cos(yaw);
+    double sin_yaw = sin(yaw);
+    // 原始偏移量（未旋转前）
+    double dx = 7.135;
+    double dy = 3.405;
+    // 把偏移量旋转 -yaw 后再取负，使 (-7.135, -3.405) 落在 world 原点
+    transform.transform.translation.x = -(dx * cos_yaw + dy * sin_yaw);
+    transform.transform.translation.y = -(-dx * sin_yaw + dy * cos_yaw);
+    transform.transform.rotation.x = quat.x();
+    transform.transform.rotation.y = quat.y();
+    transform.transform.rotation.z = quat.z();
+    transform.transform.rotation.w = quat.w();
+    static_broadcaster.sendTransform(transform);
     ros::spin();
     return 0;
 }
