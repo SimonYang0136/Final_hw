@@ -1,8 +1,8 @@
-# Install script for directory: /home/yuyu/桌面/Gazebo_Homework_plan/src/homework_planning
+# Install script for directory: /home/yuyu/桌面/Final_hw/Gazebo_ws/src/homework_planning
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/yuyu/桌面/Gazebo_Homework_plan/install")
+  set(CMAKE_INSTALL_PREFIX "/home/yuyu/桌面/Final_hw/Gazebo_ws/install")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -38,17 +38,17 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yuyu/桌面/Gazebo_Homework_plan/build/homework_planning/catkin_generated/installspace/homework_planning.pc")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/yuyu/桌面/Final_hw/Gazebo_ws/build/homework_planning/catkin_generated/installspace/homework_planning.pc")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/homework_planning/cmake" TYPE FILE FILES
-    "/home/yuyu/桌面/Gazebo_Homework_plan/build/homework_planning/catkin_generated/installspace/homework_planningConfig.cmake"
-    "/home/yuyu/桌面/Gazebo_Homework_plan/build/homework_planning/catkin_generated/installspace/homework_planningConfig-version.cmake"
+    "/home/yuyu/桌面/Final_hw/Gazebo_ws/build/homework_planning/catkin_generated/installspace/homework_planningConfig.cmake"
+    "/home/yuyu/桌面/Final_hw/Gazebo_ws/build/homework_planning/catkin_generated/installspace/homework_planningConfig-version.cmake"
     )
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/homework_planning" TYPE FILE FILES "/home/yuyu/桌面/Gazebo_Homework_plan/src/homework_planning/package.xml")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/homework_planning" TYPE FILE FILES "/home/yuyu/桌面/Final_hw/Gazebo_ws/src/homework_planning/package.xml")
 endif()
 

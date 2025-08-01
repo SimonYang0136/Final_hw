@@ -7,7 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/yuyu/桌面/Gazebo_Homework_plan/devel:$CMAKE_PREFIX_PATH"
-export PWD='/home/yuyu/桌面/Gazebo_Homework_plan/build'
-export ROSLISP_PACKAGE_DIRECTORIES='/home/yuyu/桌面/Gazebo_Homework_plan/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/yuyu/桌面/Gazebo_Homework_plan/src:$ROS_PACKAGE_PATH"
+export CMAKE_PREFIX_PATH="/home/yuyu/桌面/Final_hw/Gazebo_ws/devel:$CMAKE_PREFIX_PATH"
+export PWD='/home/yuyu/桌面/Final_hw/Gazebo_ws/build'
+export ROSLISP_PACKAGE_DIRECTORIES='/home/yuyu/桌面/Final_hw/Gazebo_ws/devel/share/common-lisp'
+export ROS_PACKAGE_PATH="/home/yuyu/桌面/Final_hw/Gazebo_ws/src:$ROS_PACKAGE_PATH"

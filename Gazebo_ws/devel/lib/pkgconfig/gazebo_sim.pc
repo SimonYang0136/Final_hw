@@ -1,0 +1,8 @@
+prefix=/home/yuyu/桌面/Final_hw/Gazebo_ws/devel
+
+Name: gazebo_sim
+Description: Description of gazebo_sim
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

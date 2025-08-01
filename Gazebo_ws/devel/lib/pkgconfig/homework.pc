@@ -1,4 +1,4 @@
-prefix=/home/yuyu/桌面/Gazebo_Homework_plan/devel
+prefix=/home/yuyu/桌面/Final_hw/Gazebo_ws/devel
 
 Name: homework
 Description: Description of homework

@@ -18,7 +18,7 @@ if not type -q bass
 end
 
 if test -z $_CATKIN_SETUP_DIR
-    set _CATKIN_SETUP_DIR /home/yuyu/桌面/Gazebo_Homework_plan/devel
+    set _CATKIN_SETUP_DIR /home/yuyu/桌面/Final_hw/Gazebo_ws/devel
 end
 
 set _SETUP_UTIL "$_CATKIN_SETUP_DIR/_setup_util.py"

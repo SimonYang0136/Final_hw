@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yuyu/桌面/Gazebo_Homework_plan/src
+CMAKE_SOURCE_DIR = /home/yuyu/桌面/Final_hw/Gazebo_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yuyu/桌面/Gazebo_Homework_plan/build
+CMAKE_BINARY_DIR = /home/yuyu/桌面/Final_hw/Gazebo_ws/build
 
 # Utility rule file for std_msgs_generate_messages_nodejs.
 
@@ -63,10 +63,10 @@ fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build: std_msgs
 .PHONY : fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
 
 fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean:
-	cd /home/yuyu/桌面/Gazebo_Homework_plan/build/fsd_common_msgs && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
+	cd /home/yuyu/桌面/Final_hw/Gazebo_ws/build/fsd_common_msgs && $(CMAKE_COMMAND) -P CMakeFiles/std_msgs_generate_messages_nodejs.dir/cmake_clean.cmake
 .PHONY : fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/clean
 
 fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/depend:
-	cd /home/yuyu/桌面/Gazebo_Homework_plan/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yuyu/桌面/Gazebo_Homework_plan/src /home/yuyu/桌面/Gazebo_Homework_plan/src/fsd_common_msgs /home/yuyu/桌面/Gazebo_Homework_plan/build /home/yuyu/桌面/Gazebo_Homework_plan/build/fsd_common_msgs /home/yuyu/桌面/Gazebo_Homework_plan/build/fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yuyu/桌面/Final_hw/Gazebo_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yuyu/桌面/Final_hw/Gazebo_ws/src /home/yuyu/桌面/Final_hw/Gazebo_ws/src/fsd_common_msgs /home/yuyu/桌面/Final_hw/Gazebo_ws/build /home/yuyu/桌面/Final_hw/Gazebo_ws/build/fsd_common_msgs /home/yuyu/桌面/Final_hw/Gazebo_ws/build/fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : fsd_common_msgs/CMakeFiles/std_msgs_generate_messages_nodejs.dir/depend
 

@@ -67,14 +67,14 @@ set(homework_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(homework_SOURCE_PREFIX /home/yuyu/桌面/Gazebo_Homework_plan/src/homework)
-  set(homework_DEVEL_PREFIX /home/yuyu/桌面/Gazebo_Homework_plan/devel)
+  set(homework_SOURCE_PREFIX /home/yuyu/桌面/Final_hw/Gazebo_ws/src/homework)
+  set(homework_DEVEL_PREFIX /home/yuyu/桌面/Final_hw/Gazebo_ws/devel)
   set(homework_INSTALL_PREFIX "")
   set(homework_PREFIX ${homework_DEVEL_PREFIX})
 else()
   set(homework_SOURCE_PREFIX "")
   set(homework_DEVEL_PREFIX "")
-  set(homework_INSTALL_PREFIX /home/yuyu/桌面/Gazebo_Homework_plan/install)
+  set(homework_INSTALL_PREFIX /home/yuyu/桌面/Final_hw/Gazebo_ws/install)
   set(homework_PREFIX ${homework_INSTALL_PREFIX})
 endif()
 
@@ -156,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/yuyu/桌面/Gazebo_Homework_plan/install/lib;/opt/ros/noetic/lib)
+    foreach(path /home/yuyu/桌面/Final_hw/Gazebo_ws/install/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

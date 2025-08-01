@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/yuyu/桌面/Gazebo_Homework_plan/src
+CMAKE_SOURCE_DIR = /home/yuyu/桌面/Final_hw/Gazebo_ws/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/yuyu/桌面/Gazebo_Homework_plan/build
+CMAKE_BINARY_DIR = /home/yuyu/桌面/Final_hw/Gazebo_ws/build
 
 # Utility rule file for download_extra_data.
 
@@ -67,6 +67,6 @@ CMakeFiles/download_extra_data.dir/clean:
 .PHONY : CMakeFiles/download_extra_data.dir/clean
 
 CMakeFiles/download_extra_data.dir/depend:
-	cd /home/yuyu/桌面/Gazebo_Homework_plan/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yuyu/桌面/Gazebo_Homework_plan/src /home/yuyu/桌面/Gazebo_Homework_plan/src /home/yuyu/桌面/Gazebo_Homework_plan/build /home/yuyu/桌面/Gazebo_Homework_plan/build /home/yuyu/桌面/Gazebo_Homework_plan/build/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/yuyu/桌面/Final_hw/Gazebo_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/yuyu/桌面/Final_hw/Gazebo_ws/src /home/yuyu/桌面/Final_hw/Gazebo_ws/src /home/yuyu/桌面/Final_hw/Gazebo_ws/build /home/yuyu/桌面/Final_hw/Gazebo_ws/build /home/yuyu/桌面/Final_hw/Gazebo_ws/build/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/download_extra_data.dir/depend
 
