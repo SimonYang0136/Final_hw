@@ -18,6 +18,35 @@ geometry_msgs::Point g_vehicle_pose = [](){
     return p;
 }();
 
+// 速度规划：根据曲率或点间距离调整速度，弯道慢，直线快
+std::vector<double> plan_speed(const std::vector<geometry_msgs::Point>& mid_points)
+{
+    std::vector<double> speeds(mid_points.size(), 2.0); // 默认速度2.0
+    if(mid_points.size() < 3) 
+        return speeds;
+    for(size_t i=1; i+1<mid_points.size(); ++i) 
+    {
+        const auto& p_prev = mid_points[i-1];
+        const auto& p = mid_points[i];
+        const auto& p_next = mid_points[i+1];
+        // 计算向量
+        double dx1 = p.x - p_prev.x;
+        double dy1 = p.y - p_prev.y;
+        double dx2 = p_next.x - p.x;
+        double dy2 = p_next.y - p.y;
+        // 计算夹角
+        double dot = dx1*dx2 + dy1*dy2;
+        double norm1 = sqrt(dx1*dx1 + dy1*dy1);
+        double norm2 = sqrt(dx2*dx2 + dy2*dy2);
+        double angle = acos(std::max(-1.0, std::min(1.0, dot/(norm1*norm2+1e-6))));
+        // 根据弯道角度调整速度，弯道越急速度越低
+        if(angle > 0.5) speeds[i] = 1.0; // 急弯
+        else if(angle > 0.2) speeds[i] = 1.5; // 普通弯
+        else speeds[i] = 2.5; // 直线
+    }
+    return speeds;
+}
+
 // 创建中心线
 visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::Point>& cone_left, const std::vector<geometry_msgs::Point>& cone_right) 
 {
@@ -63,8 +92,15 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
         mid2.z = 0;
         mid_points.push_back(mid2);
     }
+    // 速度规划
+    std::vector<double> speeds = plan_speed(mid_points);
+    //输出在终端查看速度信息
+    for(size_t i=0; i<mid_points.size(); ++i) {
+        ROS_INFO("mid_point[%lu]: (%.2f, %.2f), speed: %.2f", i, mid_points[i].x, mid_points[i].y, speeds[i]);
+    }
     line.points = mid_points;
     return line;
+
 }
 
 void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::Publisher& pub)
