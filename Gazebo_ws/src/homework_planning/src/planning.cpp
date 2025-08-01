@@ -3,6 +3,7 @@
 #include<visualization_msgs/Marker.h>
 #include<visualization_msgs/MarkerArray.h>
 #include<geometry_msgs/Point.h>
+// 根据前几个锥桶计算得到的中线的参数，用于后续判断左右锥桶
 #define K -1.333
 #define B -12.65
 // 默认车辆坐标（可用于后续起点修正等）
@@ -29,26 +30,35 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
     line.color.a = 1.0f;
     // 创建一个空的mid_points向量用于存储中点坐标
     std::vector<geometry_msgs::Point> mid_points;
-    // 车辆起点直接用原始坐标
+    // 默认车辆起点
     mid_points.push_back(g_vehicle_pose);
-    // 按x坐标排序，确保配对顺序一致
+    // 按x坐标对左右锥桶排序，确保配对顺序一致
     std::vector<geometry_msgs::Point> left_sorted = cone_left;
     std::vector<geometry_msgs::Point> right_sorted = cone_right;
     std::sort(left_sorted.begin(), left_sorted.end(), [](const geometry_msgs::Point& a, const geometry_msgs::Point& b){ return a.x < b.x; });
     std::sort(right_sorted.begin(), right_sorted.end(), [](const geometry_msgs::Point& a, const geometry_msgs::Point& b){ return a.x < b.x; });
     size_t n = std::min(left_sorted.size(), right_sorted.size());
-    for(size_t i=0; i<n; i++)
+    // 至少需要两个点才能配对
+    if (n < 2) 
+    {
+        line.action = visualization_msgs::Marker::DELETE;
+        return line;
+    }
+    //连接中点
+    for(size_t i=0; i<n; i++) 
     {
         geometry_msgs::Point mid;
+        geometry_msgs::Point mid2;
         mid.x = (left_sorted[i].x + right_sorted[i].x) / 2.0;
         mid.y = (left_sorted[i].y + right_sorted[i].y) / 2.0;
         mid.z = 0;
         mid_points.push_back(mid);
-    }
-    // 至少需要两个点，否则不返回有效Marker
-    if(mid_points.size() < 2) {
-        line.action = visualization_msgs::Marker::DELETE;
-        return line;
+        if(i==n-1)//防止越界
+            break;
+        mid2.x = (left_sorted[i].x + right_sorted[i+1].x) / 2.0;
+        mid2.y = (left_sorted[i].y + right_sorted[i+1].y) / 2.0;
+        mid2.z = 0;
+        mid_points.push_back(mid2);
     }
     line.points = mid_points;
     return line;
@@ -58,10 +68,9 @@ void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::
 {
     // 先收集原始锥桶坐标
     std::vector<geometry_msgs::Point> all_cones;
-    for(const auto& marker : cones->markers) {
+    for(const auto& marker : cones->markers) 
         all_cones.push_back(marker.pose.position);
-    }
-    // 分组
+    // 划分左右锥桶
     std::vector<geometry_msgs::Point> cone_left, cone_right;
     for(const auto& p : all_cones) 
     {
@@ -72,8 +81,6 @@ void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::
         else
             cone_right.push_back(p);
     }
-    // 调试输出分组后锥桶数量
-    ROS_INFO("Left cones: %lu, Right cones: %lu", cone_left.size(), cone_right.size());
     //将中点连线
     auto line = create_center_line(cone_left, cone_right);
     pub.publish(line);
