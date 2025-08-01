@@ -51,7 +51,7 @@ std::vector<double> plan_speed(const std::vector<geometry_msgs::Point>& mid_poin
 }
 
 // 创建中心线
-visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::Point>& cone_left, const std::vector<geometry_msgs::Point>& cone_right) 
+visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::Point>& cone_left, const std::vector<geometry_msgs::Point>& cone_right,ros::Publisher& pub ) 
 {
     visualization_msgs::Marker line;
     line.header.frame_id = "map";
@@ -63,7 +63,7 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
     line.scale.x = 0.2; // 规划线宽度
     line.color.r = 1.0f;
     line.color.a = 1.0f;
-    // 创建一个空的mid_points向量用于存储中点坐标
+    // 创建一个空的mid_points容器用于存储中点坐标
     std::vector<geometry_msgs::Point> mid_points;
     // 默认车辆起点
     mid_points.push_back(g_vehicle_pose);
@@ -95,16 +95,15 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
         mid2.z = 0;
         mid_points.push_back(mid2);
     }
+    for (size_t i=0; i<mid_points.size(); ++i)
+        pub.publish(mid_points[i]);
     // 速度规划
     std::vector<double> speeds = plan_speed(mid_points);
-    //输出在终端查看速度信息
-    for(size_t i=0; i<mid_points.size(); ++i) 
-        ROS_INFO("mid_point[%lu]: (%.2f, %.2f), speed: %.2f", i, mid_points[i].x, mid_points[i].y, speeds[i]);
     line.points = mid_points;
     return line;
 }
 
-void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::Publisher& pub)
+void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::Publisher& pub, ros::Publisher& pub2)
 {
     // 先收集原始锥桶坐标
     std::vector<geometry_msgs::Point> all_cones;
@@ -122,7 +121,7 @@ void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::
             cone_right.push_back(p);
     }
     //将中点连线
-    auto line = create_center_line(cone_left, cone_right);
+    auto line = create_center_line(cone_left, cone_right ,pub2);
     pub.publish(line);
 }
 
@@ -131,10 +130,11 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "planning");
     ros::NodeHandle nh;
     ros::Publisher pub = nh.advertise<visualization_msgs::Marker>("/planning", 10);
+    ros::Publisher pub2 = nh.advertise<geometry_msgs::Point>("/line_points",10);
     //用lambda表达式获取发布方，这样就不用定义为全局变量
-    auto callback = [&pub](const visualization_msgs::MarkerArray::ConstPtr& cones) 
+    auto callback = [&pub,&pub2](const visualization_msgs::MarkerArray::ConstPtr& cones) 
     {
-        cones_address(cones, pub);
+        cones_address(cones, pub,pub2);
     };
     ros::Subscriber sub = nh.subscribe<visualization_msgs::MarkerArray>("/mapping/cones", 10, callback);
     //广播静态变换，将map中的起点线处的两个锥桶的中点变换为world中的原点，跑道方向为world的x轴
