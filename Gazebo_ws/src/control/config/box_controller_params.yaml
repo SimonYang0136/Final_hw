@@ -1,0 +1,19 @@
+# Box Robot Controller Parameters
+# 控制参数配置文件
+
+# 运动参数
+constant_linear_velocity: 0.5    # 恒定线速度 (m/s)
+lookahead_distance: 1.0          # 前视距离 (m)
+
+# PID控制器参数
+pid_kp: 1.0                      # 比例增益
+pid_ki: 0.1                      # 积分增益  
+pid_kd: 0.05                     # 微分增益
+
+# 可选的高级参数
+max_angular_velocity: 2.0        # 最大角速度限制 (rad/s)
+integral_limit: 1.0              # 积分限幅值
+path_points_limit: 200           # 路径点数量限制
+
+# 调试参数
+debug_frequency: 20              # 调试信息打印频率 (每N次循环打印一次)

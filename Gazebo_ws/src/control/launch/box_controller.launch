@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 加载参数文件 -->
+    <rosparam file="$(find control)/config/box_controller_params.yaml" command="load"/>
+    
+    <!-- 启动控制器节点 -->
+    <node pkg="control" type="box_controller" name="box_controller" output="screen"/>
+    
+    <!-- 可选：启动rqt参数重配置界面（用于实时调参） -->
+    <!-- <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" /> -->
+    
+</launch>
