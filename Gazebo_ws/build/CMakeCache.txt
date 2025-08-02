@@ -37,7 +37,7 @@ CATKIN_SKIP_TESTING:BOOL=OFF
 CATKIN_SYMLINK_INSTALL:BOOL=OFF
 
 //List of ';' separated packages to build
-CATKIN_WHITELIST_PACKAGES:STRING=
+CATKIN_WHITELIST_PACKAGES:STRING=control;fsd_common_msgs
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -409,6 +409,9 @@ fsd_common_msgs_DIR:PATH=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel/shar
 //Value Computed by CMake
 fsd_common_msgs_SOURCE_DIR:STATIC=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/src/fsd_common_msgs
 
+//The directory containing a CMake configuration file for gazebo_msgs.
+gazebo_msgs_DIR:PATH=/opt/ros/noetic/share/gazebo_msgs/cmake
+
 //Value Computed by CMake
 gazebo_sim_BINARY_DIR:STATIC=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/gazebo_sim
 
@@ -495,7 +498,7 @@ homework_planning_BINARY_DIR:STATIC=/home/simon/Desktop/Final/Final_hw/Gazebo_ws
 homework_planning_SOURCE_DIR:STATIC=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/src/homework_planning
 
 //Path to a library.
-lib:FILEPATH=/usr/lib/liborocos-kdl.so
+lib:FILEPATH=/opt/ros/noetic/lib/libtf2.so
 
 //The directory containing a CMake configuration file for message_filters.
 message_filters_DIR:PATH=/opt/ros/noetic/share/message_filters/cmake
@@ -539,6 +542,9 @@ sensor_msgs_DIR:PATH=/opt/ros/noetic/share/sensor_msgs/cmake
 //The directory containing a CMake configuration file for std_msgs.
 std_msgs_DIR:PATH=/opt/ros/noetic/share/std_msgs/cmake
 
+//The directory containing a CMake configuration file for std_srvs.
+std_srvs_DIR:PATH=/opt/ros/noetic/share/std_srvs/cmake
+
 //The directory containing a CMake configuration file for tf2.
 tf2_DIR:PATH=/opt/ros/noetic/share/tf2/cmake
 
@@ -556,6 +562,9 @@ tf2_ros_DIR:PATH=/opt/ros/noetic/share/tf2_ros/cmake
 
 //The directory containing a CMake configuration file for tf.
 tf_DIR:PATH=/opt/ros/noetic/share/tf/cmake
+
+//The directory containing a CMake configuration file for trajectory_msgs.
+trajectory_msgs_DIR:PATH=/opt/ros/noetic/share/trajectory_msgs/cmake
 
 //The directory containing a CMake configuration file for visualization_msgs.
 visualization_msgs_DIR:PATH=/opt/ros/noetic/share/visualization_msgs/cmake
@@ -713,7 +722,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=9
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=6
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

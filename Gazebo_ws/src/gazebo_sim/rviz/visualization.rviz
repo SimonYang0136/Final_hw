@@ -77,10 +77,21 @@ Visualization Manager:
       Value: true
     - Class: rviz/Marker
       Enabled: true
-      Marker Topic: /planning_viz
+      Marker Topic: /planning
       Name: Planning Path
       Namespaces:
         "": true
+      Queue Size: 100
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /mapping/cones
+      Name: Cone Mapping
+      Namespaces:
+        blue_cones: true
+        red_cones: true
+        unknown_cones: true
+        yellow_cones: true
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray

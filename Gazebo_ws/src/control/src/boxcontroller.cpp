@@ -7,7 +7,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Point.h>
-#include <nav_msgs/Odometry.h>
+#include <gazebo_msgs/ModelStates.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <visualization_msgs/Marker.h>
 #include <tf/tf.h>
@@ -20,7 +20,7 @@ private:
     
     // 订阅器
     ros::Subscriber planning_sub_;       // 订阅规划路径点
-    ros::Subscriber odom_sub_;           // 订阅里程计（获取当前位置和方向）
+    ros::Subscriber model_states_sub_;   // 订阅Gazebo模型状态（获取当前位置和方向）
     
     // 发布器
     ros::Publisher cmd_vel_pub_;         // 发布控制命令
@@ -78,11 +78,11 @@ public:
         nh_.param("debug_frequency", debug_frequency_, 20);
         
         // 初始化订阅器
-        planning_sub_ = nh_.subscribe("/planning", 10, 
+        planning_sub_ = nh_.subscribe("/line_points", 10, 
                                      &BoxController::planningCallback, this);
         
-        odom_sub_ = nh_.subscribe("/odom", 10,
-                                 &BoxController::odomCallback, this);
+        model_states_sub_ = nh_.subscribe("/gazebo/model_states", 10,
+                                         &BoxController::modelStatesCallback, this);
         
         // 初始化发布器
         cmd_vel_pub_ = nh_.advertise<geometry_msgs::Twist>("/cmd_vel", 10);
@@ -120,28 +120,34 @@ public:
     }
     
     /**
-     * @brief 接收里程计信息
+     * @brief 接收Gazebo模型状态信息
      */
-    void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
+    void modelStatesCallback(const gazebo_msgs::ModelStates::ConstPtr& msg)
     {
-        // 更新当前位置
-        current_position_ = msg->pose.pose.position;
-        
-        // 提取当前朝向角
-        tf::Quaternion q(
-            msg->pose.pose.orientation.x,
-            msg->pose.pose.orientation.y,
-            msg->pose.pose.orientation.z,
-            msg->pose.pose.orientation.w
-        );
-        tf::Matrix3x3 m(q);
-        double roll, pitch;
-        m.getRPY(roll, pitch, current_yaw_);
-        
-        // 计算横向误差并执行PID控制
-        if (!planning_points_.empty()) {
-            calculateLateralError();
-            pidControl();
+        // 查找box_robot模型
+        for (size_t i = 0; i < msg->name.size(); ++i) {
+            if (msg->name[i] == "box_robot") {
+                // 更新当前位置
+                current_position_ = msg->pose[i].position;
+                
+                // 提取当前朝向角
+                tf::Quaternion q(
+                    msg->pose[i].orientation.x,
+                    msg->pose[i].orientation.y,
+                    msg->pose[i].orientation.z,
+                    msg->pose[i].orientation.w
+                );
+                tf::Matrix3x3 m(q);
+                double roll, pitch;
+                m.getRPY(roll, pitch, current_yaw_);
+                
+                // 计算横向误差并执行PID控制
+                if (!planning_points_.empty()) {
+                    calculateLateralError();
+                    pidControl();
+                }
+                break;
+            }
         }
     }
     
@@ -336,7 +342,7 @@ public:
     void run()
     {
         ROS_INFO("Box Lateral Controller running...");
-        ROS_INFO("Waiting for planning and odom messages...");
+        ROS_INFO("Waiting for planning and model_states messages...");
         ROS_INFO("Publishing cmd_vel and control_viz topics...");
         
         ros::spin();  // 事件驱动

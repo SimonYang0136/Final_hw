@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- ========== 参数配置 ========== -->
+    <arg name="bag_file" default="$(find fsd_common_msgs)/bag/vline.bag"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="debug" default="false"/>
+
+    <!-- 设置使用仿真时间 -->
+    <param name="use_sim_time" value="$(arg use_sim_time)"/>
+
+    <!-- ========== 1. 数据回放 ========== -->
+    <!-- Vline bag循环播放 -->
+    <node name="bag_player" pkg="rosbag" type="play" output="screen" 
+          args="--loop --clock $(arg bag_file)">
+        <remap from="/clock" to="/clock"/>
+    </node>
+
+    <!-- ========== 2. 建图节点 ========== -->
+    <!-- 使用homework包的mapper节点进行建图 -->
+    <node name="cone_mapper" pkg="homework" type="mapper" output="screen">
+        <!-- 建图参数 -->
+        <param name="cone_lifetime" value="30.0"/>
+        <param name="max_distance" value="100.0"/>
+        <param name="lidar_offset_x" value="2.4"/>
+        <param name="merge_threshold" value="2.91"/>
+        <!-- 话题重映射 -->
+        <remap from="/perception/lidar/cone_detections" to="/perception/lidar/cone_detections"/>
+        <remap from="/estimation/slam/state" to="/estimation/slam/state"/>
+        <remap from="/mapping/cones" to="/mapping/cones"/>
+        <remap from="/global_cones" to="/global_cones"/>
+    </node>
+
+    <!-- ========== 3. 路径规划节点 ========== -->
+    <!-- 使用homework_planning包的planning节点 -->
+    <node name="path_planner" pkg="homework_planning" type="planning" output="screen">
+        <!-- 话题重映射 -->
+        <remap from="/global_cones" to="/global_cones"/>
+        <remap from="/planning" to="/planning_viz"/>
+        <remap from="/line_points" to="/planning_points"/>
+    </node>
+
+    <!-- ========== 系统监控和调试 ========== -->
+    <group ns="debug" if="$(arg debug)">
+        <!-- 节点状态监控 -->
+        <node name="rosnode_monitor" pkg="rosnode" type="rosnode" args="list" output="screen"/>
+        
+        <!-- 话题监控 -->
+        <node name="rostopic_monitor" pkg="rostopic" type="rostopic" args="list" output="screen"/>
+    </group>
+
+    <!-- ========== 信息输出 ========== -->
+    <node name="system_info" pkg="rostopic" type="rostopic" output="screen"
+          args="echo /global_cones" launch-prefix="echo '[INFO] 建图和规划系统启动完成:'" if="$(arg debug)"/>
+
+</launch>

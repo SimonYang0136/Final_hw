@@ -3,21 +3,19 @@
 
 control/CMakeFiles/box_controller.dir/src/boxcontroller.cpp.o
  /home/simon/Desktop/Final/Final_hw/Gazebo_ws/src/control/src/boxcontroller.cpp
+ /opt/ros/noetic/include/gazebo_msgs/ModelStates.h
  /opt/ros/noetic/include/geometry_msgs/Point.h
  /opt/ros/noetic/include/geometry_msgs/PointStamped.h
  /opt/ros/noetic/include/geometry_msgs/Pose.h
  /opt/ros/noetic/include/geometry_msgs/PoseStamped.h
- /opt/ros/noetic/include/geometry_msgs/PoseWithCovariance.h
  /opt/ros/noetic/include/geometry_msgs/Quaternion.h
  /opt/ros/noetic/include/geometry_msgs/QuaternionStamped.h
  /opt/ros/noetic/include/geometry_msgs/Transform.h
  /opt/ros/noetic/include/geometry_msgs/TransformStamped.h
  /opt/ros/noetic/include/geometry_msgs/Twist.h
  /opt/ros/noetic/include/geometry_msgs/TwistStamped.h
- /opt/ros/noetic/include/geometry_msgs/TwistWithCovariance.h
  /opt/ros/noetic/include/geometry_msgs/Vector3.h
  /opt/ros/noetic/include/geometry_msgs/Vector3Stamped.h
- /opt/ros/noetic/include/nav_msgs/Odometry.h
  /opt/ros/noetic/include/ros/advertise_options.h
  /opt/ros/noetic/include/ros/advertise_service_options.h
  /opt/ros/noetic/include/ros/assert.h

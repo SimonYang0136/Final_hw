@@ -3,8 +3,19 @@
 <!-- filepath: urdf/box_robot.urdf -->
 <robot name="box_robot">
 
-  <!-- 主体盒子连杆 -->
+  <!-- 虚拟根链接 (解决KDL根链接惯性问题) -->
   <link name="base_link">
+  </link>
+
+  <!-- 固定关节连接虚拟根链接和实际机器人链接 -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="robot_base"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- 主体盒子连杆 -->
+  <link name="robot_base">
     <!-- 惯性属性 -->
     <inertial>
       <mass value="1000"/>
@@ -13,13 +24,6 @@
                iyy="166.6666" iyz="0.0"
                izz="166.6666"/>
     </inertial>
-
-  <!-- 固定关节-盒子0关节1连杆6自由度
-  <joint name="inertial_joint" type="fixed">
-    <parent link="base_link"/>
-    <child link="main_mass"/>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-  </joint> -->
 
     <!-- 视觉外观 -->
     <visual>
@@ -42,7 +46,7 @@
   </link>
 
   <!-- Gazebo材质和物理属性 -->
-  <gazebo reference="base_link">
+  <gazebo reference="robot_base">
     <material>Gazebo/Blue</material>
     <mu1>0.5</mu1>
     <mu2>0.5</mu2>
@@ -53,8 +57,8 @@
   <gazebo>
     <plugin name="box_controller" filename="libgazebo_ros_planar_move.so">
       <commandTopic>cmd_vel</commandTopic>
-      <odometryTopic>odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
+      <!-- <odometryTopic>odom</odometryTopic> 这个是插件可选发布的话题，不需要则可以不写 -->
+      <!-- <odometryFrame>odom</odometryFrame> 这个是插件可选使用的坐标系，不需要则可以不写 -->
       <robotBaseFrame>base_link</robotBaseFrame>
       <odometryRate>20.0</odometryRate>
     </plugin>

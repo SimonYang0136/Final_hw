@@ -152,10 +152,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/gtest/cmake_install.cmake")
   include("/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/fsd_common_msgs/cmake_install.cmake")
-  include("/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/gazebo_sim/cmake_install.cmake")
-  include("/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/homework_planning/cmake_install.cmake")
   include("/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/control/cmake_install.cmake")
-  include("/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/homework/cmake_install.cmake")
 
 endif()
 
