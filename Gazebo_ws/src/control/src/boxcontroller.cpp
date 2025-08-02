@@ -244,7 +244,7 @@ public:
         if (angular_velocity > max_angular_vel_) angular_velocity = max_angular_vel_;
         if (angular_velocity < -max_angular_vel_) angular_velocity = -max_angular_vel_;
         
-        // 发布控制命令（适用于6自由度盒子机器人）
+        // 发布控制命令（适用于3自由度盒子机器人）
         // 注意：planar_move插件工作在机器人本体坐标系下
         // 需要将world坐标系下的运动转换为机器人坐标系
         geometry_msgs::Twist cmd;
