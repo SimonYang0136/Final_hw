@@ -1,8 +1,0 @@
-prefix=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel
-
-Name: homework_planning
-Description: Description of homework_planning
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: roscpp rospy std_msgs visualization_msgs geometry_msgs tf2_ros
