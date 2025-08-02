@@ -1,4 +1,0 @@
-digraph G {
-"world" -> "map"[label="Broadcaster: /planning\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
-"map" -> "base_link"[label="Broadcaster: /cone_mapper\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 \nBuffer length: 0.000 sec\n"];
-}
