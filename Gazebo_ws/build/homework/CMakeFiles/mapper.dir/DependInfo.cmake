@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/simon/Desktop/Final/Final_hw/Gazebo_ws/src/homework/src/mapper.cpp" "/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build/homework/CMakeFiles/mapper.dir/src/mapper.cpp.o"
+  "/home/yuyu/桌面/Final_hw/Gazebo_ws/src/homework/src/mapper.cpp" "/home/yuyu/桌面/Final_hw/Gazebo_ws/build/homework/CMakeFiles/mapper.dir/src/mapper.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -17,7 +17,7 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel/include"
+  "/home/yuyu/桌面/Final_hw/Gazebo_ws/devel/include"
   "/opt/ros/noetic/include"
   "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
   "/usr/include/eigen3"
