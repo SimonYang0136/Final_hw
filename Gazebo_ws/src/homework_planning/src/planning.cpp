@@ -12,7 +12,7 @@
 // 默认车辆坐标（可用于后续起点修正等）
 geometry_msgs::Point g_vehicle_pose = [](){
     geometry_msgs::Point p;
-    p.x = -7.135;
+    p.x = 2.865;
     p.y = -3.405; 
     p.z = 0.0;
     return p;

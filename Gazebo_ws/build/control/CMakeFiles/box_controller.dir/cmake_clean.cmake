@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel/lib/control/box_controller"
-  "/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel/lib/control/box_controller.pdb"
+  "/home/yuyu/桌面/Final_hw/Gazebo_ws/devel/lib/control/box_controller"
+  "/home/yuyu/桌面/Final_hw/Gazebo_ws/devel/lib/control/box_controller.pdb"
   "CMakeFiles/box_controller.dir/src/boxcontroller.cpp.o"
 )
 
