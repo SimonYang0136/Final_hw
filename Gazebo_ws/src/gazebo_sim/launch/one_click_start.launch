@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- ========== 参数配置 ========== -->
+    <arg name="world_file" default="$(find gazebo_sim)/world/map.world"/>
+    <arg name="urdf_file" default="$(find gazebo_sim)/urdf/box.urdf"/>
+    <arg name="bag_file" default="$(find fsd_common_msgs)/bag/vline.bag"/>
+    <arg name="rviz_config" default="$(find gazebo_sim)/rviz/visualization.rviz"/>
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+
+    <!-- ========== 1. Gazebo仿真环境 ========== -->
+    <group ns="simulation">
+        <!-- 启动Gazebo with自定义世界 -->
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="world_name" value="$(arg world_file)"/>
+            <arg name="paused" value="$(arg paused)"/>
+            <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+            <arg name="gui" value="$(arg gui)"/>
+            <arg name="headless" value="$(arg headless)"/>
+            <arg name="debug" value="$(arg debug)"/>
+        </include>
+
+        <!-- 加载机器人描述参数 -->
+        <param name="robot_description" textfile="$(arg urdf_file)"/>
+
+        <!-- 在Gazebo中生成机器人 -->
+        <node name="spawn_robot" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+              args="-param robot_description -urdf -x 0 -y 0 -z 0.1 -model box_robot"/>
+
+        <!-- 发布机器人状态 -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen"/>
+    </group>
+
+    <!-- ========== 2. 数据回放 ========== -->
+    <group ns="data_playback">
+        <!-- Vline bag循环播放 -->
+        <node name="bag_player" pkg="rosbag" type="play" output="screen" 
+              args="--loop --clock $(arg bag_file)">
+            <remap from="/clock" to="/clock"/>
+        </node>
+    </group>
+
+    <!-- ========== 3. 建图节点 ========== -->
+    <group ns="mapping">
+        <!-- 使用homework包的mapper节点进行建图 -->
+        <node name="cone_mapper" pkg="homework" type="mapper" output="screen">
+            <!-- 建图参数 -->
+            <param name="cone_lifetime" value="30.0"/>
+            <param name="max_distance" value="100.0"/>
+            <param name="lidar_offset_x" value="2.4"/>
+            <param name="merge_threshold" value="2.91"/>
+            <!-- 话题重映射 -->
+            <remap from="/perception/lidar/cone_detections" to="/perception/lidar/cone_detections"/>
+            <remap from="/estimation/slam/state" to="/estimation/slam/state"/>
+            <remap from="/mapping/cones" to="/mapping/cones"/>
+            <remap from="/global_cones" to="/global_cones"/>
+        </node>
+    </group>
+
+    <!-- ========== 4. 路径规划节点 ========== -->
+    <group ns="planning">
+        <!-- 使用homework_planning包的planning节点 -->
+        <node name="path_planner" pkg="homework_planning" type="planning" output="screen">
+            <!-- 话题重映射 -->
+            <remap from="/global_cones" to="/global_cones"/>
+            <remap from="/planning" to="/planning_viz"/>
+            <remap from="/line_points" to="/planning_points"/>
+        </node>
+    </group>
+
+    <!-- ========== 5. 控制节点 ========== -->
+    <group ns="control">
+        <!-- 加载控制器参数 -->
+        <rosparam file="$(find control)/config/box_controller_params.yaml" command="load"/>
+        
+        <!-- Box控制器节点 -->
+        <node name="box_controller" pkg="control" type="box_controller" output="screen">
+            <!-- 话题重映射 -->
+            <remap from="/planning" to="/planning_points"/>
+            <remap from="/odom" to="/odom"/>
+            <remap from="/cmd_vel" to="/cmd_vel"/>
+            <remap from="/control_viz" to="/control_viz"/>
+        </node>
+    </group>
+
+    <!-- ========== 6. 可视化节点 ========== -->
+    <group ns="visualization">
+        <!-- RViz可视化 -->
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_config)" output="screen" unless="$(arg headless)"/>
+        
+        <!-- TF发布器 -->
+        <node name="static_tf_publisher" pkg="tf" type="static_transform_publisher" 
+              args="0 0 0 0 0 0 map odom 100"/>
+    </group>
+
+    <!-- ========== 系统监控和调试 ========== -->
+    <group ns="debug" if="$(arg debug)">
+        <!-- 节点状态监控 -->
+        <node name="rosnode_monitor" pkg="rosnode" type="rosnode" args="list" output="screen"/>
+        
+        <!-- 话题监控 -->
+        <node name="rostopic_monitor" pkg="rostopic" type="rostopic" args="list" output="screen"/>
+    </group>
+
+    <!-- ========== 信息输出 ========== -->
+    <node name="system_info" pkg="rospy_tutorials" type="talker" output="screen" launch-prefix="echo">
+        <param name="data" value="=== 一键启动系统已启动 ==="/>
+    </node>
+
+</launch>

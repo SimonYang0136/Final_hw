@@ -1,2 +1,2 @@
 control:fsd_common_msgs:gazebo_sim:homework:homework_planning
--DCATKIN_DEVEL_PREFIX=/home/yuyu/桌面/Final_hw/Gazebo_ws/devel -DCMAKE_INSTALL_PREFIX=/home/yuyu/桌面/Final_hw/Gazebo_ws/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/devel -DCMAKE_INSTALL_PREFIX=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/install -G Unix Makefiles
