@@ -2,7 +2,7 @@
 # 控制参数配置文件
 
 # 运动参数
-constant_linear_velocity: 0.5    # 恒定线速度 (m/s)
+constant_linear_velocity: 10.0    # 恒定线速度 (m/s)
 lookahead_distance: 1.0          # 前视距离 (m)
 
 # PID控制器参数

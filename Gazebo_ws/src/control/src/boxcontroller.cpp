@@ -46,6 +46,9 @@ private:
     // 路径点
     std::vector<geometry_msgs::Point> planning_points_;
     
+    // 机器人轨迹点（实际走过的路径）
+    std::vector<geometry_msgs::Point> robot_trajectory_;
+    
     // 当前状态
     geometry_msgs::Point current_position_;
     double current_yaw_;
@@ -129,6 +132,18 @@ public:
             if (msg->name[i] == "box_robot") {
                 // 更新当前位置
                 current_position_ = msg->pose[i].position;
+                
+                // 添加当前位置到轨迹中（每隔一定距离记录一次）
+                if (robot_trajectory_.empty() || 
+                    sqrt(pow(current_position_.x - robot_trajectory_.back().x, 2) + 
+                         pow(current_position_.y - robot_trajectory_.back().y, 2)) > 0.1) {
+                    robot_trajectory_.push_back(current_position_);
+                    
+                    // 限制轨迹点数量
+                    if (robot_trajectory_.size() > 1000) {
+                        robot_trajectory_.erase(robot_trajectory_.begin());
+                    }
+                }
                 
                 // 提取当前朝向角
                 tf::Quaternion q(
@@ -263,63 +278,17 @@ public:
     }
     
     /**
-     * @brief 发布控制状态可视化（前视点和机器人位置）
+     * @brief 发布控制状态可视化（机器人轨迹线）
      */
     void publishControlLine()
     {
-        if (planning_points_.empty()) return;
-        
         visualization_msgs::MarkerArray marker_array;
         
-        // 创建前视点标记
-        geometry_msgs::Point lookahead_point;
-        bool found_lookahead = false;
-        
-        // 计算前视点
-        for (const auto& point : planning_points_) {
-            double distance = sqrt(
-                pow(point.x - current_position_.x, 2) +
-                pow(point.y - current_position_.y, 2)
-            );
-            
-            if (distance >= lookahead_distance_) {
-                lookahead_point = point;
-                found_lookahead = true;
-                break;
-            }
-        }
-        
-        if (!found_lookahead) {
-            lookahead_point = planning_points_.back();
-        }
-        
-        // 前视点标记
-        visualization_msgs::Marker lookahead_marker;
-        lookahead_marker.header.frame_id = "world";
-        lookahead_marker.header.stamp = ros::Time::now();
-        lookahead_marker.ns = "lookahead_point";
-        lookahead_marker.id = 0;
-        lookahead_marker.type = visualization_msgs::Marker::SPHERE;
-        lookahead_marker.action = visualization_msgs::Marker::ADD;
-        
-        lookahead_marker.pose.position = lookahead_point;
-        lookahead_marker.pose.orientation.w = 1.0;
-        
-        lookahead_marker.scale.x = 0.2;
-        lookahead_marker.scale.y = 0.2;
-        lookahead_marker.scale.z = 0.2;
-        lookahead_marker.color.r = 1.0;  // 红色
-        lookahead_marker.color.g = 0.0;
-        lookahead_marker.color.b = 0.0;
-        lookahead_marker.color.a = 1.0;
-        
-        marker_array.markers.push_back(lookahead_marker);
-        
-        // 创建轨迹线标记
+        // 创建机器人轨迹线标记
         visualization_msgs::Marker trajectory_marker;
         trajectory_marker.header.frame_id = "world";
         trajectory_marker.header.stamp = ros::Time::now();
-        trajectory_marker.ns = "trajectory_line";
+        trajectory_marker.ns = "robot_trajectory";
         trajectory_marker.id = 2;
         trajectory_marker.type = visualization_msgs::Marker::LINE_STRIP;
         trajectory_marker.action = visualization_msgs::Marker::ADD;
@@ -327,47 +296,21 @@ public:
         trajectory_marker.pose.orientation.w = 1.0;
         
         // 设置线条属性
-        trajectory_marker.scale.x = 0.05;  // 线条宽度
+        trajectory_marker.scale.x = 0.08;  // 线条宽度
         trajectory_marker.color.r = 0.0;
         trajectory_marker.color.g = 0.0;
         trajectory_marker.color.b = 1.0;   // 蓝色
         trajectory_marker.color.a = 0.8;   // 稍微透明
         
-        // 添加所有规划点到轨迹线
-        for (const auto& point : planning_points_) {
+        // 添加机器人实际走过的轨迹点
+        for (const auto& point : robot_trajectory_) {
             trajectory_marker.points.push_back(point);
         }
         
-        // 只有当有足够的点时才显示轨迹线
-        if (planning_points_.size() > 1) {
+        // 只有当有足够的轨迹点时才显示轨迹线
+        if (robot_trajectory_.size() > 1) {
             marker_array.markers.push_back(trajectory_marker);
         }
-        
-        // 创建当前位置标记
-        visualization_msgs::Marker robot_marker;
-        robot_marker.header.frame_id = "world";
-        robot_marker.header.stamp = ros::Time::now();
-        robot_marker.ns = "robot_position";
-        robot_marker.id = 1;
-        robot_marker.type = visualization_msgs::Marker::ARROW;
-        robot_marker.action = visualization_msgs::Marker::ADD;
-        
-        robot_marker.pose.position = current_position_;
-        tf::Quaternion q = tf::createQuaternionFromYaw(current_yaw_);
-        robot_marker.pose.orientation.x = q.x();
-        robot_marker.pose.orientation.y = q.y();
-        robot_marker.pose.orientation.z = q.z();
-        robot_marker.pose.orientation.w = q.w();
-        
-        robot_marker.scale.x = 0.3;  // 箭头长度
-        robot_marker.scale.y = 0.1;  // 箭头宽度
-        robot_marker.scale.z = 0.1;  // 箭头高度
-        robot_marker.color.r = 0.0;
-        robot_marker.color.g = 1.0;  // 绿色
-        robot_marker.color.b = 0.0;
-        robot_marker.color.a = 1.0;
-        
-        marker_array.markers.push_back(robot_marker);
         
         // 发布可视化消息
         control_viz_pub_.publish(marker_array);
