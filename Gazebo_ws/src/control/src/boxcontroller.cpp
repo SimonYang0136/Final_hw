@@ -230,9 +230,18 @@ public:
         if (angular_velocity < -max_angular_vel_) angular_velocity = -max_angular_vel_;
         
         // 发布控制命令（适用于6自由度盒子机器人）
+        // 注意：planar_move插件工作在机器人本体坐标系下
+        // 需要将world坐标系下的运动转换为机器人坐标系
         geometry_msgs::Twist cmd;
-        cmd.linear.x = constant_linear_vel_;    // 恒定线速度
-        cmd.linear.y = 0.0;
+        
+        // 将world坐标系下的恒定线速度转换到机器人坐标系
+        // world坐标系下期望沿x轴正方向运动
+        double world_vx = constant_linear_vel_;  // world坐标系下的x方向速度
+        double world_vy = 0.0;                   // world坐标系下的y方向速度
+        
+        // 转换到机器人本体坐标系
+        cmd.linear.x = world_vx * cos(current_yaw_) + world_vy * sin(current_yaw_);
+        cmd.linear.y = -world_vx * sin(current_yaw_) + world_vy * cos(current_yaw_);
         cmd.linear.z = 0.0;
         cmd.angular.x = 0.0;
         cmd.angular.y = 0.0;
@@ -305,6 +314,34 @@ public:
         lookahead_marker.color.a = 1.0;
         
         marker_array.markers.push_back(lookahead_marker);
+        
+        // 创建轨迹线标记
+        visualization_msgs::Marker trajectory_marker;
+        trajectory_marker.header.frame_id = "world";
+        trajectory_marker.header.stamp = ros::Time::now();
+        trajectory_marker.ns = "trajectory_line";
+        trajectory_marker.id = 2;
+        trajectory_marker.type = visualization_msgs::Marker::LINE_STRIP;
+        trajectory_marker.action = visualization_msgs::Marker::ADD;
+        
+        trajectory_marker.pose.orientation.w = 1.0;
+        
+        // 设置线条属性
+        trajectory_marker.scale.x = 0.05;  // 线条宽度
+        trajectory_marker.color.r = 0.0;
+        trajectory_marker.color.g = 0.0;
+        trajectory_marker.color.b = 1.0;   // 蓝色
+        trajectory_marker.color.a = 0.8;   // 稍微透明
+        
+        // 添加所有规划点到轨迹线
+        for (const auto& point : planning_points_) {
+            trajectory_marker.points.push_back(point);
+        }
+        
+        // 只有当有足够的点时才显示轨迹线
+        if (planning_points_.size() > 1) {
+            marker_array.markers.push_back(trajectory_marker);
+        }
         
         // 创建当前位置标记
         visualization_msgs::Marker robot_marker;
