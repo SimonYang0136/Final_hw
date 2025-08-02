@@ -122,6 +122,7 @@ void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::
             cone_right.push_back(p);
     }
     //将中点连线
+    ROS_INFO("cone_left size: %lu, cone_right size: %lu", cone_left.size(), cone_right.size());
     auto line = create_center_line(cone_left, cone_right ,pub2);
     pub.publish(line);
 }
@@ -145,7 +146,7 @@ int main(int argc, char **argv)
     transform.header.frame_id = "world";   // 父坐标系
     transform.child_frame_id = "map";      // 子坐标系
     // map 的原点在 world 中的位置
-    transform.transform.translation.x = 7.135;
+    transform.transform.translation.x = 2.865;
     transform.transform.translation.y = 3.405;
     transform.transform.translation.z = 0.0;
     tf2::Quaternion quat;
@@ -155,9 +156,9 @@ int main(int argc, char **argv)
     double cos_yaw = cos(yaw);
     double sin_yaw = sin(yaw);
     // 原始偏移量（未旋转前）
-    double dx = 7.135;
+    double dx = 2.865;
     double dy = 3.405;
-    // 把偏移量旋转 -yaw 后再取负，使 (-7.135, -3.405) 落在 world 原点
+    // 把偏移量旋转 -yaw 后再取负，使  落在 world 原点
     transform.transform.translation.x = -(dx * cos_yaw + dy * sin_yaw);
     transform.transform.translation.y = -(-dx * sin_yaw + dy * cos_yaw);
     transform.transform.rotation.x = quat.x();
