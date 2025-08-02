@@ -7,8 +7,8 @@
 #include<geometry_msgs/TransformStamped.h>
 #include <tf2/LinearMath/Quaternion.h>
 // 根据前几个锥桶计算得到的中线的参数，用于后续判断左右锥桶
-#define K -1.333
-#define B -12.65
+#define K -1.278
+#define B 0.25647
 // 默认车辆坐标（可用于后续起点修正等）
 geometry_msgs::Point g_vehicle_pose = [](){
     geometry_msgs::Point p;
@@ -66,7 +66,7 @@ visualization_msgs::Marker create_center_line(const std::vector<geometry_msgs::P
     // 创建一个空的mid_points容器用于存储中点坐标
     std::vector<geometry_msgs::Point> mid_points;
     // 默认车辆起点
-    mid_points.push_back(g_vehicle_pose);
+    // mid_points.push_back(g_vehicle_pose);
     // 按x坐标对左右锥桶排序，确保配对顺序一致
     std::vector<geometry_msgs::Point> left_sorted = cone_left;
     std::vector<geometry_msgs::Point> right_sorted = cone_right;
@@ -114,7 +114,7 @@ void cones_address(const visualization_msgs::MarkerArray::ConstPtr& cones, ros::
     std::vector<geometry_msgs::Point> cone_left, cone_right;
     for(const auto& p : all_cones) 
     {
-        if (std::abs(K*p.x-p.y + B)/(sqrt(K*K+B*B))>0.5)
+        if (std::abs(K*p.x-p.y + B)/(sqrt(K*K+B*B))>5)
             continue;
         if (K*p.x-p.y + B > 0)
             cone_left.push_back(p);
