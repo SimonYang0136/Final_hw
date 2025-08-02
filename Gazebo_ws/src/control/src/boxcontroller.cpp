@@ -286,7 +286,7 @@ public:
         
         // 前视点标记
         visualization_msgs::Marker lookahead_marker;
-        lookahead_marker.header.frame_id = "map";
+        lookahead_marker.header.frame_id = "world";
         lookahead_marker.header.stamp = ros::Time::now();
         lookahead_marker.ns = "lookahead_point";
         lookahead_marker.id = 0;
@@ -308,7 +308,7 @@ public:
         
         // 创建当前位置标记
         visualization_msgs::Marker robot_marker;
-        robot_marker.header.frame_id = "map";
+        robot_marker.header.frame_id = "world";
         robot_marker.header.stamp = ros::Time::now();
         robot_marker.ns = "robot_position";
         robot_marker.id = 1;
