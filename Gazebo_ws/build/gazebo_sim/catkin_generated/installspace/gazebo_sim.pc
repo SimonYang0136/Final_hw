@@ -1,4 +1,4 @@
-prefix=/home/yuyu/桌面/Final_hw/Gazebo_ws/install
+prefix=/home/simon/Desktop/Final/Final_hw/Gazebo_ws/install
 
 Name: gazebo_sim
 Description: Description of gazebo_sim

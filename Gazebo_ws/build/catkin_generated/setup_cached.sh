@@ -7,7 +7,7 @@
 # new environment variables
 
 # modified environment variables
-export CMAKE_PREFIX_PATH="/home/yuyu/桌面/Final_hw/Gazebo_ws/devel:$CMAKE_PREFIX_PATH"
-export PWD='/home/yuyu/桌面/Final_hw/Gazebo_ws/build'
-export ROSLISP_PACKAGE_DIRECTORIES='/home/yuyu/桌面/Final_hw/Gazebo_ws/devel/share/common-lisp'
-export ROS_PACKAGE_PATH="/home/yuyu/桌面/Final_hw/Gazebo_ws/src:$ROS_PACKAGE_PATH"
+export LD_LIBRARY_PATH='/opt/ros/noetic/lib'
+export PKG_CONFIG_PATH='/opt/ros/noetic/lib/pkgconfig:/opt/OpenCV/OpenCV-4.5.5/lib/pkgconfig:/opt/OpenCV/OpenCV-4.5.5/lib/pkgconfig'
+export PWD='/home/simon/Desktop/Final/Final_hw/Gazebo_ws/build'
+export PYTHONPATH='/opt/ros/noetic/lib/python3/dist-packages'

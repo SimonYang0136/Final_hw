@@ -207,7 +207,7 @@ public:
     void pidControl()
     {
         ros::Time current_time = ros::Time::now();
-        double dt = (current_time - last_time_).toSec();
+        double dt = (current_time - last_time_).toSec();//ROS时间格式转换为秒
         
         if (dt <= 0.0) return;  // 避免除零
         
@@ -286,7 +286,7 @@ public:
         
         // 前视点标记
         visualization_msgs::Marker lookahead_marker;
-        lookahead_marker.header.frame_id = "odom";
+        lookahead_marker.header.frame_id = "map";
         lookahead_marker.header.stamp = ros::Time::now();
         lookahead_marker.ns = "lookahead_point";
         lookahead_marker.id = 0;
@@ -308,7 +308,7 @@ public:
         
         // 创建当前位置标记
         visualization_msgs::Marker robot_marker;
-        robot_marker.header.frame_id = "odom";
+        robot_marker.header.frame_id = "map";
         robot_marker.header.stamp = ros::Time::now();
         robot_marker.ns = "robot_position";
         robot_marker.id = 1;
